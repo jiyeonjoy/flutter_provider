@@ -13,17 +13,15 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(builder: (_) => Counter())
       ],
-      child: Consumer<Counter>(builder: (context, counter, _){
-        return MaterialApp(
+      child: MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(
 
             primarySwatch: Colors.blue,
           ),
           home: MyHomePage(title: 'Flutter Demo Home Page'),
-        );
-      }),
-    );
+        )
+      );
   }
 }
 
@@ -42,8 +40,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
 
-    final counter = Provider.of<Counter>(context);
-
+    final counter = Provider.of<Counter>(context, listen: false);
+    print('rebuild');
     return Scaffold(
       appBar: AppBar(
 
@@ -58,10 +56,14 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               'You have pushed the button this many times:',
             ),
-            Text(
-              '${counter.count}',
-              style: Theme.of(context).textTheme.display1,
-            ),
+            Consumer<Counter>(
+              builder: (context, counter, child) {
+                return Text(
+                '${counter.count}',
+                style: Theme.of(context).textTheme.display1,
+                );
+              }
+            )
           ],
         ),
       ),
